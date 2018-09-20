@@ -1,0 +1,11 @@
+VAGRANTFILE_API_VERSION = "2"
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+
+  config.ssh.pty = true
+  config.vm.define "challenge" do |challenge|
+    challenge.vm.box = "mcloide/centos-6.5-lamp"
+    challenge.vm.network "forwarded_port", guest: 80, host: 8080
+    challenge.vm.network "forwarded_port", guest: 443, host: 8443
+  end
+end
