@@ -1,6 +1,6 @@
 VAGRANTFILE_API_VERSION = "2"
 
-$script = <<-SCRIPT
+$script_document_root_fix = <<-SCRIPT
 mv /var/www/info.php /var/www/html/info.php
 sed -i -e "s|VirtualDocumentRoot /vagrant/%0|VirtualDocumentRoot /var/www/html|g" /etc/httpd/conf.d/vhosts.conf
 service httpd restart
@@ -14,5 +14,5 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     challenge.vm.network "forwarded_port", guest: 80, host: 8080
     challenge.vm.network "forwarded_port", guest: 443, host: 8443
   end
-  config.vm.provision "shell", inline: $script
+  config.vm.provision "shell", inline: $script_document_root_fix
 end
