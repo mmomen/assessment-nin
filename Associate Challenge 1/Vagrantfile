@@ -1,10 +1,5 @@
 VAGRANTFILE_API_VERSION = "2"
 
-$script_document_root_fix = <<-SCRIPT
-mv /var/www/info.php /var/www/html/info.php
-sed -i -e "s|VirtualDocumentRoot /vagrant/%0|VirtualDocumentRoot /var/www/html|g" /etc/httpd/conf.d/vhosts.conf
-service httpd restart
-SCRIPT
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
@@ -14,5 +9,13 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     challenge.vm.network "forwarded_port", guest: 80, host: 8080
     challenge.vm.network "forwarded_port", guest: 443, host: 8443
   end
-  config.vm.provision "shell", inline: $script_document_root_fix
+  # update config files
+  config.vm.provision "file", source: "vhosts.conf", destination: "/etc/httpd/conf.d/vhosts.conf"
+  config.vm.provision "file", source: "vhosts_ssl.conf", destination: "/etc/httpd/conf.d/vhosts_ssl.conf"
+  # move info.php to /var/www/html - the document root set in config
+  config.vm.provision "shell", inline: "mv /var/www/info.php /var/www/html/index.php"
+  # generate new self-signed cert
+  config.vm.provision "shell", inline: "openssl req -x509 -batch -nodes -newkey rsa:2048 -keyout /etc/ssl/certs/localhost.key -out /etc/ssl/certs/localhost.crt"
+  # restart apache/httpd to enact changes
+  config.vm.provision "shell", inline: "service httpd restart"
 end
