@@ -8,11 +8,13 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     challenge.vm.network "forwarded_port", guest: 80, host: 8080
     challenge.vm.network "forwarded_port", guest: 443, host: 8443
     challenge.vm.provision "file", source: "wattime.sh", destination: "/tmp/wattime.sh"
+    challenge.vm.provision "file", source: "dir_cleaner.py", destination: "/tmp/dir_cleaner.py"
     challenge.vm.provision "file", source: "crontab", destination: "/tmp/cronroot"
+    challenge.vm.provision "shell", inline: "sudo yum install -y python-argparse"
     challenge.vm.provision "shell", inline: "sudo yum install -y dos2unix ; dos2unix /tmp/wattime.sh ; dos2unix /tmp/cronroot"
     challenge.vm.provision "shell", inline: "mkdir /tmp/wattime ; chmod 777 /tmp/wattime"
-
     challenge.vm.provision "shell", inline: "sudo install -m 755 -o root -g root /tmp/wattime.sh /usr/bin"
+    challenge.vm.provision "shell", inline: "sudo install -m 755 -o root -g root /tmp/dir_cleaner.py /usr/bin"
     challenge.vm.provision "shell", inline: "sudo crontab -u root /tmp/cronroot; sudo /etc/init.d/crond restart"
   end
 end

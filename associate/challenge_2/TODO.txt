@@ -1,0 +1,6 @@
+TODO
+
+-Track with milliseconds
+-Add debug option
+-Better syslog w/ different priority levels
+-Better errorlogging around os.remove
