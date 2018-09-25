@@ -12,9 +12,9 @@ def arg_parse():
     arguments = parser.parse_args()
     if os.path.isfile(arguments.log_path):
         log_path = arguments.log_path
-        return log_path
     else:
         sys.exit(arguments.log_path + " is not a directory.")
+    return log_path
 
 
 def log_parse(log_path):
@@ -42,5 +42,20 @@ def log_parse(log_path):
     return dict_ip, dict_request_type, dict_request_path, dict_request_status_code
 
 
+def find_num_of_string_appereances_in_dict(search_string, log_dict):
+    i = 0
+    lines_found = []
+    for line_num in log_dict:
+        if search_string in log_dict[line_num]:
+            lines_found.append(line_num)
+            i += 1
+    return i, lines_found
+
 if __name__ == "__main__":
-    outputs = log_parse(arg_parse())
+    args = arg_parse()
+    outputs = log_parse(args)
+    # 1 -How many times the URL "/production/file_metadata/modules/ssh/sshd_config" was fetched
+    search_string = "/production/file_metadata/modules/ssh/sshd_config"
+    first_case = find_num_of_string_appereances_in_dict(search_string, outputs[2])
+    print str(first_case[0]) + " apperances of the string string: " + search_string
+    # 2- Of those requests, how many times the return code from Apache was not 200
