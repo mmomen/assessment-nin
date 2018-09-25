@@ -51,6 +51,17 @@ def find_count_of_string_in_dict(search_string, dict_log):
             i += 1
     return i, lines_found
 
+
+def find_count_of_values_of_lines_in_dict(arr_lines_found, dict_log):
+    dict_results = {}
+    for line_num in dict_log:
+        if dict_log[line_num] in dict_results:
+            dict_results[str(dict_log[line_num])] += 1
+        else:
+            dict_results[str(dict_log[line_num])] = 1
+    return dict_results
+
+
 if __name__ == "__main__":
     args = arg_parse()
     outputs = log_parse(args)
@@ -61,3 +72,5 @@ if __name__ == "__main__":
     first_case_lines = first_case[1]
     print str(first_case_count) + " apperances of the string string: " + search_string
     # 2- Of those requests, how many times the return code from Apache was not 200
+    second_case = find_count_of_values_of_lines_in_dict(first_case_lines, outputs[3])
+    print second_case
