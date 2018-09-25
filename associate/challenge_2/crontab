@@ -1,0 +1,2 @@
+# CRON, what time is it?
+0-59/1 * * * * /usr/bin/wattime.sh
