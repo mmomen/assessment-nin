@@ -1,6 +1,9 @@
 TODO
 
--Track with milliseconds
+-Syslog when parameters are bad (can't see if bad inputs in cron)
+-Argument parser into module?
+-Short/long names for the arguments
 -Add debug option
+-Track with milliseconds
 -Better syslog w/ different priority levels
--Better errorlogging around os.remove
+-Better errorlogging around os.remove?

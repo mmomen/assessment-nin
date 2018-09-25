@@ -1,3 +1,3 @@
 # CRON, what time is it?
 0-59/1 * * * * /usr/bin/wattime.sh
-*/10 * * * * python /usr/bin/dir_cleaner.py
+*/10 * * * * python /usr/bin/dir_cleaner.py /tmp/wattime 1800

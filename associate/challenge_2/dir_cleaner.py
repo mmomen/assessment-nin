@@ -41,14 +41,16 @@ if __name__ == "__main__":
                         help="The amount of time, in seconds, files older than should be deleted. Default is 1800.",
                         default=1800)
     arguments = parser.parse_args()
+    dir_path = arguments.dir_path
+    seconds = int(arguments.seconds)
 
     if os.path.isdir(arguments.dir_path):
         syslog.syslog("Script " + sys.argv[0] + " executing at " +
                       time.strftime('%Y-%m-%d %H:%M %Z', time.localtime(script_start)) +
-                      " on directory " + arguments.dir_path + " for files older than " +
-                      arguments.seconds + " seconds.")
+                      " on directory " + dir_path + " for files older than " +
+                      str(seconds) + " seconds.")
         # Main execution starts here
-        files_to_delete = find_files(arguments.dir_path, script_start, int(arguments.seconds))
+        files_to_delete = find_files(dir_path, script_start, seconds)
         delete_and_log(files_to_delete)
         syslog.syslog("Script complete.")
     else:
