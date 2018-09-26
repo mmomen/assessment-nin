@@ -45,19 +45,16 @@ def log_parse(log_path):
 def find_count_of_string_in_dict(search_string, dict_log, search_string_unary=False):
     # provided a string and a dictionary of values from the log, find string,
     # return number of appearances and an array of the line numbers where it was found
-    i = 0
     lines_found = []
     if search_string_unary:
         for line_num in dict_log:
             if search_string not in dict_log[line_num]:
                 lines_found.append(line_num)
-                i += 1
     else:
         for line_num in dict_log:
             if search_string in dict_log[line_num]:
                 lines_found.append(line_num)
-                i += 1
-    return i, lines_found
+    return len(lines_found), lines_found
 
 
 def find_count_of_values_of_lines_in_dict(arr_lines_found, dict_log):
