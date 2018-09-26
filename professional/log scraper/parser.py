@@ -85,7 +85,7 @@ if __name__ == "__main__":
     print str(first_case_count) + " appearances of the string string: " + search_string
 
     # 2: Of those requests, how many times the return code from Apache was not 200
-    second_case = find_count_of_values_of_lines_in_dict(first_case_lines, outputs[3])
+    second_case = find_count_of_values_of_lines_in_dict(first_case_lines, request_status_codes)
     for key in second_case:
         if key != "200":
             print key + " status code appeared " + str(second_case[key]) + " time(s)."
