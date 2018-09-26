@@ -42,15 +42,21 @@ def log_parse(log_path):
     return dict_request_ip, dict_request_type, dict_request_path, dict_request_status_code
 
 
-def find_count_of_string_in_dict(search_string, dict_log):
+def find_count_of_string_in_dict(search_string, dict_log, search_string_unary=False):
     # provided a string and a dictionary of values from the log, find string,
     # return number of appearances and an array of the line numbers where it was found
     i = 0
     lines_found = []
-    for line_num in dict_log:
-        if search_string in dict_log[line_num]:
-            lines_found.append(line_num)
-            i += 1
+    if search_string_unary:
+        for line_num in dict_log:
+            if search_string not in dict_log[line_num]:
+                lines_found.append(line_num)
+                i += 1
+    else:
+        for line_num in dict_log:
+            if search_string in dict_log[line_num]:
+                lines_found.append(line_num)
+                i += 1
     return i, lines_found
 
 
@@ -88,3 +94,7 @@ if __name__ == "__main__":
             print key + " status code appeared " + str(second_case[key]) + " time(s)."
 
     # 3: The total number of times Apache returned any code other than 200
+    third_case = find_count_of_string_in_dict("200", request_status_codes, True)
+    third_case_count = third_case[0]
+    third_case_lines = third_case[1]
+    print str(third_case_count) + " appearances of non-200 HTTP status codes."
