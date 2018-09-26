@@ -23,11 +23,11 @@ def log_parse(log_path):
     dict_request_type = {}
     dict_request_path = {}
     dict_request_status_code = {}
-    # dict_datetime = {}
+    # dict_request_datetime = {}
     # dict_request_time = {}
     i = 0
 
-    # loop over each line in log
+    # go through each line in log and parse out capture groups
     with open(log_path) as f:
         for line in f:
             match = re.search(pattern, line)
@@ -35,7 +35,7 @@ def log_parse(log_path):
             dict_request_type[i] = match.group(3)
             dict_request_path[i] = match.group(4)
             dict_request_status_code[i] = match.group(5)
-            # dict_datetime[i] = match.group(2)
+            # dict_request_datetime[i] = match.group(2)
             # dict_request_time[i] = match.group(6)
             i += 1
 
@@ -43,6 +43,8 @@ def log_parse(log_path):
 
 
 def find_count_of_string_in_dict(search_string, dict_log):
+    # provided a string and a dictionary of values from the log, find string,
+    # return number of apperances and an array of the line numbers where it was found
     i = 0
     lines_found = []
     for line_num in dict_log:
@@ -53,6 +55,8 @@ def find_count_of_string_in_dict(search_string, dict_log):
 
 
 def find_count_of_values_of_lines_in_dict(arr_lines_found, dict_log):
+    # provided an array of line numbers and a dictionary of log values
+    # return a dictionary of values of what appears on those lines
     dict_results = {}
     for line_num in dict_log:
         if dict_log[line_num] in dict_results:
