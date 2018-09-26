@@ -106,8 +106,8 @@ if __name__ == "__main__":
     find_puts_lines = find_puts[1]  # Lines of all PUTs
 
     find_puts_by_path = find_count_of_values_of_lines_in_dict(find_puts_lines, request_paths)
-    fourth_count = 0
+    fourth_case_lines = []
     for key in find_puts_by_path:
         if fourth_search_path in key:
-            fourth_count += 1
-    print str(fourth_count) + " appearances of " + fourth_search_request + " and " + fourth_search_path
+            fourth_case_lines.append(find_puts_by_path[key])
+    print str(len(fourth_case_lines)) + " appearances of " + fourth_search_request + " and " + fourth_search_path
