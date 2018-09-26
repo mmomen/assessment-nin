@@ -69,9 +69,14 @@ def find_count_of_values_of_lines_in_dict(arr_lines_found, dict_log):
 if __name__ == "__main__":
     args = arg_parse()
     outputs = log_parse(args)
+    request_ips = outputs[0]
+    request_types = outputs[1]
+    request_paths = outputs[2]
+    request_status_codes = outputs[3]
+
     # 1: How many times the URL "/production/file_metadata/modules/ssh/sshd_config" was fetched
     search_string = "/production/file_metadata/modules/ssh/sshd_config"
-    first_case = find_count_of_string_in_dict(search_string, outputs[2])
+    first_case = find_count_of_string_in_dict(search_string, request_paths)
     first_case_count = first_case[0]
     first_case_lines = first_case[1]
     print str(first_case_count) + " appearances of the string string: " + search_string
