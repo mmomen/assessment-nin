@@ -111,3 +111,9 @@ if __name__ == "__main__":
         if fourth_search_path in key:
             fourth_case_lines.append(find_puts_by_path[key])
     print str(len(fourth_case_lines)) + " appearances of " + fourth_search_request + " and " + fourth_search_path
+
+    # 5: A breakdown of how many times such requests (from 4th case) were made by IP address
+    fifth_case = find_count_of_values_of_lines_in_dict(fourth_case_lines, request_ips)
+    print "Breakdown by IP address of %s requests to a path under %s:" % (fourth_search_request, fourth_search_path)
+    for key in fifth_case:
+        print str(key) + ": " + str(len(fifth_case[key]))
