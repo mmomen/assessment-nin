@@ -44,7 +44,7 @@ def log_parse(log_path):
 
 def find_count_of_string_in_dict(search_string, dict_log):
     # provided a string and a dictionary of values from the log, find string,
-    # return number of apperances and an array of the line numbers where it was found
+    # return number of appearances and an array of the line numbers where it was found
     i = 0
     lines_found = []
     for line_num in dict_log:
@@ -74,7 +74,9 @@ if __name__ == "__main__":
     first_case = find_count_of_string_in_dict(search_string, outputs[2])
     first_case_count = first_case[0]
     first_case_lines = first_case[1]
-    print str(first_case_count) + " apperances of the string string: " + search_string
+    print str(first_case_count) + " appearances of the string string: " + search_string
     # 2- Of those requests, how many times the return code from Apache was not 200
     second_case = find_count_of_values_of_lines_in_dict(first_case_lines, outputs[3])
-    print second_case
+    for key in second_case:
+        if key != "200":
+            print key + " status code appeared " + str(second_case[key]) + " time(s)."
