@@ -63,9 +63,10 @@ def find_count_of_values_of_lines_in_dict(arr_lines_found, dict_log):
     dict_results = {}
     for line_num in dict_log:
         if dict_log[line_num] in dict_results:
-            dict_results[str(dict_log[line_num])] += 1
+            dict_results[str(dict_log[line_num])].append(line_num)
         else:
-            dict_results[str(dict_log[line_num])] = 1
+            dict_results[str(dict_log[line_num])] = []
+            dict_results[str(dict_log[line_num])].append(line_num)
     return dict_results
 
 
@@ -88,7 +89,7 @@ if __name__ == "__main__":
     second_case = find_count_of_values_of_lines_in_dict(first_case_lines, request_status_codes)
     for key in second_case:
         if key != "200":
-            print key + " status code appeared " + str(second_case[key]) + " time(s)."
+            print key + " status code appeared " + str(len(second_case[key])) + " time(s)."
 
     # 3: The total number of times Apache returned any code other than 200
     third_case = find_count_of_string_in_dict("200", request_status_codes, True)
