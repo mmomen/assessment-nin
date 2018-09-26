@@ -95,3 +95,18 @@ if __name__ == "__main__":
     third_case_count = third_case[0]
     third_case_lines = third_case[1]
     print str(third_case_count) + " appearances of non-200 HTTP status codes."
+
+    # 4: The total number of times that any IP address sent a PUT request to a path under "/dev/report/"
+    fourth_search_request = "PUT"
+    fourth_search_path = "/dev/report/"
+
+    find_puts = find_count_of_string_in_dict(fourth_search_request, request_types)
+    find_puts_count = find_puts[0]  # Count of all PUTs
+    find_puts_lines = find_puts[1]  # Lines of all PUTs
+
+    find_puts_by_path = find_count_of_values_of_lines_in_dict(find_puts_lines, request_paths)
+    fourth_count = 0
+    for key in find_puts_by_path:
+        if fourth_search_path in key:
+            fourth_count += 1
+    print str(fourth_count) + " appearances of " + fourth_search_request + " and " + fourth_search_path
