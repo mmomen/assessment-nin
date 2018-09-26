@@ -69,14 +69,17 @@ def find_count_of_values_of_lines_in_dict(arr_lines_found, dict_log):
 if __name__ == "__main__":
     args = arg_parse()
     outputs = log_parse(args)
-    # 1 -How many times the URL "/production/file_metadata/modules/ssh/sshd_config" was fetched
+    # 1: How many times the URL "/production/file_metadata/modules/ssh/sshd_config" was fetched
     search_string = "/production/file_metadata/modules/ssh/sshd_config"
     first_case = find_count_of_string_in_dict(search_string, outputs[2])
     first_case_count = first_case[0]
     first_case_lines = first_case[1]
     print str(first_case_count) + " appearances of the string string: " + search_string
-    # 2- Of those requests, how many times the return code from Apache was not 200
+
+    # 2: Of those requests, how many times the return code from Apache was not 200
     second_case = find_count_of_values_of_lines_in_dict(first_case_lines, outputs[3])
     for key in second_case:
         if key != "200":
             print key + " status code appeared " + str(second_case[key]) + " time(s)."
+
+    # 3: The total number of times Apache returned any code other than 200
