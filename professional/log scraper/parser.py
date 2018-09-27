@@ -18,28 +18,29 @@ def arg_parse():
 
 
 def log_parse(log_path):
+    # parse log to pull relevant data, will be saved in a dictionary
+    # key is line number, value is the desired value for that line
     pattern = r'(\b(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\b) - - \[(.*)\] "(\w{3,5}) (\/.*) HTTP\/1.1" (\d{3}) (\d*)'
-    dict_request_ip = {}
-    dict_request_type = {}
-    dict_request_path = {}
-    dict_request_status_code = {}
-    # dict_request_datetime = {}
-    # dict_request_time = {}
+    log_requests_ip = {}
+    # log_requests_datetime = {}
+    log_requests_type = {}
+    log_requests_path = {}
+    log_requests_status_code = {}
+    # log_requests_time = {}
     i = 0
 
-    # go through each line in log and parse out capture groups
     with open(log_path) as f:
         for line in f:
             match = re.search(pattern, line)
-            dict_request_ip[i] = match.group(1)
-            dict_request_type[i] = match.group(3)
-            dict_request_path[i] = match.group(4)
-            dict_request_status_code[i] = match.group(5)
-            # dict_request_datetime[i] = match.group(2)
-            # dict_request_time[i] = match.group(6)
+            log_requests_ip[i] = match.group(1)
+            # log_requests_datetime[i] = match.group(2)
+            log_requests_type[i] = match.group(3)
+            log_requests_path[i] = match.group(4)
+            log_requests_status_code[i] = match.group(5)
+            # log_requests_time[i] = match.group(6)
             i += 1
 
-    return dict_request_ip, dict_request_type, dict_request_path, dict_request_status_code
+    return log_requests_ip, log_requests_type, log_requests_path, log_requests_status_code
 
 
 def find_count_of_string_in_dict(search_string, dict_log, search_string_unary=False):
