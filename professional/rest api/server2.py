@@ -7,6 +7,8 @@ import BaseHTTPServer
 HOST_NAME = 'localhost'
 PORT_NUMBER = 9090
 
+wordnames = {}
+
 
 class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
     def do_HEAD(s):
@@ -36,18 +38,23 @@ class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
         content_len = int(s.headers.getheader('content-length', 0))
         body = s.rfile.read(content_len)
         path_split = path.split('/')
-        path_first = path_split[1]
-        path_second = path_split[2]
-        print path, content_len, body, path_split, len(path_split)
+        path_levels = len(path_split)-1
 
         if content_len == 0:  # check for nothing in request body
-            if len(path_split) == 3:  # what we're looking for
-                print 'yes'
-            elif (len(path_split) == 4 and path_split[-1] == ''):  # in case there is a trailing slash
-                print 'yes but why'
+            # check for 2 levels (3 items in list) or 3 levels with an empty string (trailing slash)
+            if (path_levels == 2) or (path_levels == 3 and path_split[-1] == ''):
+                print '2 levels'
+                path_first_level = path_split[1].lower()
+                path_second_level = path_split[2].lower()
+                if path_first_level == 'word':
+                    if path_second_level in wordnames:
+                        wordnames[path_second_level] += 1
+                    else:
+                        wordnames[path_second_level] = 1
             else:  # all other cases do nothing
-                print 'no'
-        #else ignore
+                print 'path is not correct'
+        else:
+            print 'must have no request body'  # else ignore
 
 if __name__ == '__main__':
     server_class = BaseHTTPServer.HTTPServer
