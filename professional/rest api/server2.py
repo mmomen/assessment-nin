@@ -38,7 +38,7 @@ class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
         content_len = int(s.headers.getheader('content-length', 0))
         body = s.rfile.read(content_len)
         path_split = path.split('/')
-        path_levels = len(path_split)-1
+        path_levels = len(path_split)-1  # first item is always empty (starting slash)
 
         if content_len == 0:  # check for nothing in request body
             # check for 2 levels (3 items in list) or 3 levels with an empty string (trailing slash)
