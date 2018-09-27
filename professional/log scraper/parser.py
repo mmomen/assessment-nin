@@ -18,8 +18,10 @@ def arg_parse():
 
 
 def log_parse(log_path):
-    # parse log to pull relevant data, will be saved in a dictionary
-    # key is line number, value is the desired value for that line
+    ''' parse log to pull relevant data, will be saved in a dictionary
+        key is line number, value is the desired value for that line
+    '''
+
     pattern = r'(\b(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\b) - - \[(.*)\] "(\w{3,5}) (\/.*) HTTP\/1.1" (\d{3}) (\d*)'
     log_requests_ip = {}
     # log_requests_datetime = {}
@@ -44,8 +46,10 @@ def log_parse(log_path):
 
 
 def find_count_of_string_in_dict(search_string, dict_log, search_string_unary=False):
-    # provided a string and a dictionary of values from the log, find string,
-    # return number of appearances and an array of the line numbers where it was found
+    ''' provided a string and a dictionary of values from the log, find string,
+        return number of appearances and an array of the line numbers where it was found
+    '''
+
     lines_found = []
     if search_string_unary:
         for line_num in dict_log:
@@ -59,8 +63,10 @@ def find_count_of_string_in_dict(search_string, dict_log, search_string_unary=Fa
 
 
 def find_count_of_values_of_lines_in_dict(arr_lines_found, dict_log):
-    # provided an array of line numbers and a dictionary of log values
-    # return a dictionary of values of what appears on those lines
+    ''' provided an array of line numbers and a dictionary of log values
+        return a dictionary of values of what appears on those lines
+    '''
+
     dict_results = {}
     for line_num in dict_log:
         if dict_log[line_num] in dict_results:
