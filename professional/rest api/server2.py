@@ -15,13 +15,41 @@ for i in range(0, 10):
 
 
 class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
-    def page_headers(self, code, content_type):
-        self.send_response(code)
-        self.send_header("Content-type", content_type)
-        self.end_headers()
+    def send_to_client(s, code, content_type, message):
+        s.send_response(code)
+        s.send_header("Content-type", content_type)
+        s.end_headers()
+        if message:
+            if content_type == "application/json":
+                message_to_write = json.dumps(message)
+            else:
+                message_to_write == message
+            s.wfile.write(message_to_write)
+
+    def return_success(s, wordname, word_log):
+        if wordname in word_log:
+            word_log[wordname] += 1
+        else:
+            word_log[wordname] = 1
+        s.send_to_client(200, "application/json", {"words": {wordname: word_log[wordname]}})
+
+    def return_error(s, error_type, code):
+        if error_type == "non alpha character":
+            error_message = "PUT requests may only be alphabetical, cannot contain numeric or special characters."
+        elif error_type == "not one word":
+            error_message = "PUT requests must be one word (e.g. /word/christopherwalken)."
+        elif error_type == "first level not word":
+            error_message = "PUT requests must use 'word' as first level in path (e.g. /word/[WORDNAME])."
+        elif error_type == "bad path":
+            error_message = "PUT requests must have paths in the following structure: /word/[WORDNAME])"
+        elif error_type == "request has body":
+            error_message = "PUT requests cannot contain a request body."
+        else:
+            error_message = "An unexpected error has occured."
+        s.send_to_client(code, "application/json", {"error": error_message})
 
     def do_HEAD(s):
-        s.page_headers(200, "text/html")
+        s.send_to_client(200, "text/html", False)
 
     def do_GET(s):
         """Respond to a GET request."""
@@ -42,36 +70,6 @@ class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
         path_split = path.split('/')
         path_levels = len(path_split)-1  # first item is always empty (starting slash)
 
-        def return_request(code, content_type, message):
-            s.page_headers(code, content_type)
-            if content_type == "application/json":
-                message_to_write = json.dumps(message)
-            else:  # TK is this needed?
-                print 'is this needed?'
-            s.wfile.write(message_to_write)
-
-        def return_success(wordname, word_log):
-            if wordname in word_log:
-                word_log[wordname] += 1
-            else:
-                word_log[wordname] = 1
-            return_request(200, "application/json", {"words": {wordname: word_log[wordname]}})
-
-        def return_error(error_type, code):
-            if error_type == "non alpha character":
-                error_message = "PUT requests may only be alphabetical, cannot contain numeric or special characters."
-            elif error_type == "not one word":
-                error_message = "PUT requests must be one word (e.g. /word/christopherwalken)."
-            elif error_type == "first level not word":
-                error_message = "PUT requests must use 'word' as first level in path (e.g. /word/[WORDNAME])."
-            elif error_type == "bad path":
-                error_message = "PUT requests must have paths in the following structure: /word/[WORDNAME])"
-            elif error_type == "request has body":
-                error_message = "PUT requests cannot contain a request body."
-            else:
-                error_message = "An unexpected error has occured."
-            return_request(code, "application/json", {"error": error_message})
-
         if content_len == 0:  # check for nothing in request body
             # 2 levels with no trailling slash or 3 levels with trailling slash = proper path structure
             if (path_levels == 2 and path_split[-1] != '') or (path_levels == 3 and path_split[-1] == ''):
@@ -80,17 +78,17 @@ class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
                 if path_first_level == "word":
                     if len(path_second_level.split('%20')) == 1:
                         if any(char in invalidChars for char in path_second_level):
-                            return_error("non alpha character", 400)
+                            s.return_error("non alpha character", 400)
                         else:
-                            return_success(path_second_level, wordnames)
+                            s.return_success(path_second_level, wordnames)
                     else:
-                        return_error("not one word", 400)
+                        s.return_error("not one word", 400)
                 else:
-                    return_error("first level not word", 400)
+                    s.return_error("first level not word", 400)
             else:
-                return_error("bad path", 400)
+                s.return_error("bad path", 400)
         else:
-            return_error("request has body", 400)
+            s.return_error("request has body", 400)
 
 
 if __name__ == '__main__':
