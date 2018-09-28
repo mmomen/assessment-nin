@@ -1,0 +1,138 @@
+test_name: Test cases for professional/rest api
+
+stages:
+  - name: PUT "bob" to create
+    request:
+      url: http://localhost:9090/word/bob
+      method: PUT
+    response:
+      status_code: 200
+      body:
+        words:
+            bob: 1
+
+  - name: PUT "bob" a second time
+    request:
+      url: http://localhost:9090/word/bob
+      method: PUT
+    response:
+      status_code: 200
+      body:
+        words:
+            bob: 2
+
+  - name: PUT "david" with a trailling slash
+    request:
+      url: http://localhost:9090/word/david/
+      method: PUT
+    response:
+      status_code: 200
+      body:
+        words:
+            david: 1
+
+  - name: PUT with request body
+    request:
+      url: http://localhost:9090/word/samwell
+      method: PUT
+      json:
+        test: "Hi"
+    response:
+      status_code: 400
+      body:
+        error: PUT requests cannot contain a request body.
+
+  - name: PUT with special character
+    request:
+      url: http://localhost:9090/word/hot$stuff
+      method: PUT
+    response:
+      status_code: 400
+      body:
+        error: PUT requests may not contain special characters.
+
+  - name: PUT with 2 words
+    request:
+      url: http://localhost:9090/word/bob hope
+      method: PUT
+    response:
+      status_code: 400
+      body:
+        error: PUT requests must be one word (e.g. /word/christopherwalken).
+
+  # - name: PUT with wrong first level
+  #   request:
+  #     url: http://localhost:9090/word/bob
+  #     method: PUT
+  #   response:
+  #     status_code: 400
+  #     body:
+  #       words:
+  #           bob: 2
+
+# - name: PUT with bad path (1)
+  #   request:
+  #     url: http://localhost:9090/word/bob
+  #     method: PUT
+  #   response:
+  #     status_code: 400
+  #     body:
+  #       words:
+  #           bob: 2
+
+
+# - name: PUT with bad path (2)
+  #   request:
+  #     url: http://localhost:9090/word/bob
+  #     method: PUT
+  #   response:
+  #     status_code: 400
+  #     body:
+  #       words:
+  #           bob: 2
+
+
+# - name: PUT numeric character
+  #   request:
+  #     url: http://localhost:9090/word/b0b
+  #     method: PUT
+  #   response:
+  #     status_code: 400
+  #     body:
+  #       error:
+
+
+# - name: GET /words
+  #   request:
+  #     url: http://localhost:9090/words
+  #     method: GET
+  #   response:
+  #     status_code: 200
+  #     body:
+  #       words:
+  #           bob: 2
+              # david: 1
+
+
+# - name: GET "/word/bob"
+  #   request:
+  #     url: http://localhost:9090/word/bob
+  #     method: GET
+  #   response:
+  #     status_code: 200
+  #     body:
+  #       words:
+  #           bob: 2
+
+
+# - name: GET "/word/david"
+  #   request:
+  #     url: http://localhost:9090/word/david
+  #     method: GET
+  #   response:
+  #     status_code: 200
+  #     body:
+  #       words:
+  #           david: 1
+
+
