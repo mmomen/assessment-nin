@@ -38,7 +38,7 @@ stages:
       json:
         test: "Hi"
     response:
-      status_code: 412
+      status_code: 400
       body:
         error: PUT requests cannot contain a request body.
 
@@ -47,7 +47,7 @@ stages:
       url: http://localhost:9090/word/hot$stuff
       method: PUT
     response:
-      status_code: 412
+      status_code: 400
       body:
         error: "PUT requests may only be alphabetical, cannot contain numeric or special characters."
 
@@ -56,7 +56,7 @@ stages:
       url: http://localhost:9090/word/bob hope
       method: PUT
     response:
-      status_code: 412
+      status_code: 400
       body:
         error: PUT requests must be one word (e.g. /word/christopherwalken).
 
@@ -65,7 +65,7 @@ stages:
       url: http://localhost:9090/samwell/tarly
       method: PUT
     response:
-      status_code: 412
+      status_code: 400
       body:
         error: "PUT requests must use 'word' as first level in path (e.g. /word/[WORDNAME])."
 
@@ -74,7 +74,7 @@ stages:
       url: http://localhost:9090/word/bob/hyperdinger
       method: PUT
     response:
-      status_code: 412
+      status_code: 400
       body:
         error: "PUT requests must have paths in the following structure: /word/[WORDNAME])"
 
@@ -83,7 +83,7 @@ stages:
       url: "http://localhost:9090/weird/looking/url?query=why&this=1"
       method: PUT
     response:
-      status_code: 412
+      status_code: 400
       body:
         error: "PUT requests must have paths in the following structure: /word/[WORDNAME])"
 
@@ -92,7 +92,7 @@ stages:
       url: http://localhost:9090/word/b0b
       method: PUT
     response:
-      status_code: 412
+      status_code: 400
       body:
         error: "PUT requests may only be alphabetical, cannot contain numeric or special characters."
 
@@ -143,7 +143,7 @@ stages:
       url: http://localhost:9090/gannondorf
       method: GET
     response:
-      status_code: 412
+      status_code: 400
       body:
         error: "This is an unsupported GET request. Please visit /words or /word/[WORDNAME]."
 
@@ -152,6 +152,6 @@ stages:
       url: http://localhost:9090/butter/chicken/always
       method: GET
     response:
-      status_code: 412
+      status_code: 400
       body:
         error: "This is an unsupported GET request. Please visit /words or /word/[WORDNAME]."

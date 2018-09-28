@@ -82,7 +82,7 @@ class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
                 s.return_success("GET", path_second_level, wordnames)
                 return
 
-        s.return_error("unsupported GET", 412)  # last resort
+        s.return_error("unsupported GET", 400)  # last resort
 
     def do_PUT(s):
         """Respond to a PUT request."""
@@ -99,25 +99,25 @@ class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
                 if path_first_level == "word":
                     if len(path_second_level.split('%20')) == 1:
                         if any(char in invalidChars for char in path_second_level):
-                            s.return_error("non alpha character", 412)
+                            s.return_error("non alpha character", 400)
                             return
                         else:
                             s.return_success("PUT", path_second_level, wordnames)
                             return
                     else:
-                        s.return_error("not one word", 412)
+                        s.return_error("not one word", 400)
                         return
                 else:
-                    s.return_error("first level not word", 412)
+                    s.return_error("first level not word", 400)
                     return
             else:
-                s.return_error("bad path", 412)
+                s.return_error("bad path", 400)
                 return
         else:
-            s.return_error("request has body", 412)
+            s.return_error("request has body", 400)
             return
 
-        s.return_error("unsupported PUT", 412)  # last resort
+        s.return_error("unsupported PUT", 400)  # last resort
 
 
 if __name__ == '__main__':
