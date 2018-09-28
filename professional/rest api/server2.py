@@ -71,14 +71,13 @@ class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
             return_request(code, "application/json", {"error": error_message})
 
         if content_len == 0:  # check for nothing in request body
-            # 2 levels and last is not an empty string (trailing slash with no WORDNAME) or
-            # 3 levels and last is an empty string (trailling slash)
+            # 2 levels with no trailling slash or 3 levels with trailling slash = proper path structure
             if (path_levels == 2 and path_split[-1] != '') or (path_levels == 3 and path_split[-1] == ''):
                 path_first_level = path_split[1].lower()
                 path_second_level = path_split[2].lower()
                 if path_first_level == "word":
                     if len(path_second_level.split('%20')) == 1:
-                        if any(char in invalidChars for char in path_second_level):  # if no special characters
+                        if any(char in invalidChars for char in path_second_level):
                             return_error("special character", 400)
                         else:
                             return_single(path_second_level, wordnames)
