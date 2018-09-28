@@ -48,7 +48,7 @@ class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
                 print 'is this needed?'
             s.wfile.write(message_to_write)
 
-        def return_single(wordname, word_log):
+        def return_success(wordname, word_log):
             if wordname in word_log:
                 word_log[wordname] += 1
             else:
@@ -80,7 +80,7 @@ class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
                         if any(char in invalidChars for char in path_second_level):
                             return_error("special character", 400)
                         else:
-                            return_single(path_second_level, wordnames)
+                            return_success(path_second_level, wordnames)
                     else:
                         return_error("not one word", 400)
                 else:
