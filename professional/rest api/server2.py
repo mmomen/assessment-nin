@@ -9,6 +9,9 @@ HOST_NAME = 'localhost'
 PORT_NUMBER = 9090
 
 wordnames = {}
+invalidChars = set(string.punctuation)
+for i in range(0, 10):
+    invalidChars.add(str(i))
 
 
 class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
@@ -33,7 +36,6 @@ class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
     def do_PUT(s):
         """Respond to a PUT request."""
         # On Success, return the integer count of how many times that word has been PUT to the api in a JSON hash
-        invalidChars = set(string.punctuation)
         path = s.path
         content_len = int(s.headers.getheader('content-length', 0))
         body = s.rfile.read(content_len)
@@ -56,8 +58,8 @@ class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
             return_request(200, "application/json", {"words": {wordname: word_log[wordname]}})
 
         def return_error(error_type, code):
-            if error_type == "special character":
-                error_message = "PUT requests may not contain special characters."
+            if error_type == "non alpha character":
+                error_message = "PUT requests may only be alphabetical, cannot contain numeric or special characters."
             elif error_type == "not one word":
                 error_message = "PUT requests must be one word (e.g. /word/christopherwalken)."
             elif error_type == "first level not word":
@@ -78,7 +80,7 @@ class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
                 if path_first_level == "word":
                     if len(path_second_level.split('%20')) == 1:
                         if any(char in invalidChars for char in path_second_level):
-                            return_error("special character", 400)
+                            return_error("non alpha character", 400)
                         else:
                             return_success(path_second_level, wordnames)
                     else:

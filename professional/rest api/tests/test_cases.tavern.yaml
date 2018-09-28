@@ -49,7 +49,7 @@ stages:
     response:
       status_code: 400
       body:
-        error: PUT requests may not contain special characters.
+        error: "PUT requests may only be alphabetical, cannot contain numeric or special characters."
 
   - name: PUT with 2 words
     request:
@@ -60,46 +60,41 @@ stages:
       body:
         error: PUT requests must be one word (e.g. /word/christopherwalken).
 
-  # - name: PUT with wrong first level
-  #   request:
-  #     url: http://localhost:9090/word/bob
-  #     method: PUT
-  #   response:
-  #     status_code: 400
-  #     body:
-  #       words:
-  #           bob: 2
+  - name: PUT with wrong first level
+    request:
+      url: http://localhost:9090/samwell/tarly
+      method: PUT
+    response:
+      status_code: 400
+      body:
+        error: "PUT requests must use 'word' as first level in path (e.g. /word/[WORDNAME])."
 
-# - name: PUT with bad path (1)
-  #   request:
-  #     url: http://localhost:9090/word/bob
-  #     method: PUT
-  #   response:
-  #     status_code: 400
-  #     body:
-  #       words:
-  #           bob: 2
+  - name: PUT with bad path (1)
+    request:
+      url: http://localhost:9090/word/bob/hyperdinger
+      method: PUT
+    response:
+      status_code: 400
+      body:
+        error: "PUT requests must have paths in the following structure: /word/[WORDNAME])"
 
+  - name: PUT with bad path (2)
+    request:
+      url: "http://localhost:9090/weird/looking/url?query=why&this=1"
+      method: PUT
+    response:
+      status_code: 400
+      body:
+        error: "PUT requests must have paths in the following structure: /word/[WORDNAME])"
 
-# - name: PUT with bad path (2)
-  #   request:
-  #     url: http://localhost:9090/word/bob
-  #     method: PUT
-  #   response:
-  #     status_code: 400
-  #     body:
-  #       words:
-  #           bob: 2
-
-
-# - name: PUT numeric character
-  #   request:
-  #     url: http://localhost:9090/word/b0b
-  #     method: PUT
-  #   response:
-  #     status_code: 400
-  #     body:
-  #       error:
+  - name: PUT numeric character
+    request:
+      url: http://localhost:9090/word/b0b
+      method: PUT
+    response:
+      status_code: 400
+      body:
+        error: "PUT requests may only be alphabetical, cannot contain numeric or special characters."
 
 
 # - name: GET /words

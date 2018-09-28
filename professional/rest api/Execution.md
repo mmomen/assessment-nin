@@ -2,7 +2,7 @@
 
 1. Install tavern for testing: `pip install tavern[pytest]`
 2. Run server: `python server2.py`
-3. Run test cases: `py.text tests/test_cases.tavern.yaml`
+3. Run test cases: `py.text tests/test_cases.tavern.yaml` or `tavern-ci tests/test_cases.tavern.yaml`
 
 ## Test Cases - `test_cases.tavern.yaml`
 
