@@ -65,7 +65,7 @@ def find_lines_of_string_in_dict_log(search_string, dict_log, search_string_unar
 def find_lines_of_given_array_of_lines_in_dict(arr_lines_found, dict_log):
     ''' provided an array of line numbers and a dictionary of log values (ideally of a
         different log type), return a dictionary of values of what appears on those lines
-        {"what is found": [line, numbers]}
+        {"found_value": [1, 5, 95]}
     '''
 
     results = {}
