@@ -33,9 +33,10 @@ class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
             else:
                 word_log[wordname] = 1
         elif request_type == "GET":
-            if wordname in word_log:
-                pass
-            else:
+            if wordname is None:
+                s.send_to_client(200, "application/json", {"words": word_log})
+                return
+            if wordname not in word_log:
                 s.send_to_client(200, "application/json", {"words": {wordname: 0}})
                 return 0
         s.send_to_client(200, "application/json", {"words": {wordname: word_log[wordname]}})
@@ -51,6 +52,10 @@ class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
             error_message = "PUT requests must have paths in the following structure: /word/[WORDNAME])"
         elif error_type == "request has body":
             error_message = "PUT requests cannot contain a request body."
+        elif error_type == "unsupported GET":
+            error_message = "This is an unsupported GET request. Please visit /words or /word/[WORDNAME]."
+        elif error_type == "unsupported PUT":
+            error_message = "This is an unsupported PUT request. Make a PUT request to /word/[WORDNAME]."
         else:
             error_message = "An unexpected error has occured."
         s.send_to_client(code, "application/json", {"error": error_message})
@@ -60,16 +65,24 @@ class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
 
     def do_GET(s):
         """Respond to a GET request."""
-        # s.page_headers(200, "text/html")
         path = s.path
         path_split = path.split('/')
         path_levels = len(path_split)-1  # first item is always empty (starting slash)
 
-        if (path_levels == 2 and path_split[-1] != '') or (path_levels == 3 and path_split[-1] == ''):
+        # check for proper level, with or without trailing slash
+        if (path_levels == 1 and path_split[-1] != '') or (path_levels == 2 and path_split[-1] == ''):
+            path_first_level = path_split[1].lower()
+            if path_first_level == "words":
+                s.return_success("GET", None, wordnames)
+                return
+        elif (path_levels == 2 and path_split[-1] != '') or (path_levels == 3 and path_split[-1] == ''):
             path_first_level = path_split[1].lower()
             path_second_level = path_split[2].lower()
             if path_first_level == "word":
                 s.return_success("GET", path_second_level, wordnames)
+                return
+
+        s.return_error("unsupported GET", 412)  # last resort
 
     def do_PUT(s):
         """Respond to a PUT request."""
@@ -80,24 +93,31 @@ class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
         path_levels = len(path_split)-1  # first item is always empty (starting slash)
 
         if content_len == 0:  # check for nothing in request body
-            # 2 levels with no trailling slash or 3 levels with trailling slash = proper path structure
             if (path_levels == 2 and path_split[-1] != '') or (path_levels == 3 and path_split[-1] == ''):
                 path_first_level = path_split[1].lower()
                 path_second_level = path_split[2].lower()
                 if path_first_level == "word":
                     if len(path_second_level.split('%20')) == 1:
                         if any(char in invalidChars for char in path_second_level):
-                            s.return_error("non alpha character", 400)
+                            s.return_error("non alpha character", 412)
+                            return
                         else:
                             s.return_success("PUT", path_second_level, wordnames)
+                            return
                     else:
-                        s.return_error("not one word", 400)
+                        s.return_error("not one word", 412)
+                        return
                 else:
-                    s.return_error("first level not word", 400)
+                    s.return_error("first level not word", 412)
+                    return
             else:
-                s.return_error("bad path", 400)
+                s.return_error("bad path", 412)
+                return
         else:
-            s.return_error("request has body", 400)
+            s.return_error("request has body", 412)
+            return
+
+        s.return_error("unsupported PUT", 412)  # last resort
 
 
 if __name__ == '__main__':

@@ -17,5 +17,7 @@
 1. PUT with bad path (2) (expect failure)
 1. PUT with numeric character (expect failure)
 1. GET /words for total results
+1. GET /words/ for total results
 1. GET a single word
 1. GET another single word
+1. Unsupported GET request
