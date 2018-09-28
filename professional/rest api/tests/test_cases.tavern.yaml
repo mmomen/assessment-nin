@@ -97,7 +97,7 @@ stages:
         error: "PUT requests may only be alphabetical, cannot contain numeric or special characters."
 
 
-# - name: GET /words
+  # - name: GET /words
   #   request:
   #     url: http://localhost:9090/words
   #     method: GET
@@ -105,29 +105,29 @@ stages:
   #     status_code: 200
   #     body:
   #       words:
-  #           bob: 2
-              # david: 1
+  #         bob: 2
+  #         david: 1
 
 
-# - name: GET "/word/bob"
-  #   request:
-  #     url: http://localhost:9090/word/bob
-  #     method: GET
-  #   response:
-  #     status_code: 200
-  #     body:
-  #       words:
-  #           bob: 2
+  - name: GET "/word/bob"
+    request:
+      url: http://localhost:9090/word/bob
+      method: GET
+    response:
+      status_code: 200
+      body:
+        words:
+          bob: 2
 
 
-# - name: GET "/word/david"
-  #   request:
-  #     url: http://localhost:9090/word/david
-  #     method: GET
-  #   response:
-  #     status_code: 200
-  #     body:
-  #       words:
-  #           david: 1
+  - name: GET "/word/david"
+    request:
+      url: http://localhost:9090/word/david
+      method: GET
+    response:
+      status_code: 200
+      body:
+        words:
+          david: 1
 
 

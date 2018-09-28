@@ -26,11 +26,18 @@ class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
                 message_to_write == message
             s.wfile.write(message_to_write)
 
-    def return_success(s, wordname, word_log):
-        if wordname in word_log:
-            word_log[wordname] += 1
-        else:
-            word_log[wordname] = 1
+    def return_success(s, request_type, wordname, word_log):
+        if request_type == "PUT":
+            if wordname in word_log:
+                word_log[wordname] += 1
+            else:
+                word_log[wordname] = 1
+        elif request_type == "GET":
+            if wordname in word_log:
+                pass
+            else:
+                s.send_to_client(200, "application/json", {"words": {wordname: 0}})
+                return 0
         s.send_to_client(200, "application/json", {"words": {wordname: word_log[wordname]}})
 
     def return_error(s, error_type, code):
@@ -53,20 +60,22 @@ class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
 
     def do_GET(s):
         """Respond to a GET request."""
-        s.page_headers(200, "text/html")
-        s.wfile.write("<html><head><title>Title goes here.</title></head>")
-        s.wfile.write("<body><p>This is a test.</p>")
-        # If someone went to "http://something.somewhere.net/foo/bar/",
-        # then s.path equals "/foo/bar/".
-        s.wfile.write("<p>You accessed path: %s</p>" % s.path)
-        s.wfile.write("</body></html>")
+        # s.page_headers(200, "text/html")
+        path = s.path
+        path_split = path.split('/')
+        path_levels = len(path_split)-1  # first item is always empty (starting slash)
+
+        if (path_levels == 2 and path_split[-1] != '') or (path_levels == 3 and path_split[-1] == ''):
+            path_first_level = path_split[1].lower()
+            path_second_level = path_split[2].lower()
+            if path_first_level == "word":
+                s.return_success("GET", path_second_level, wordnames)
 
     def do_PUT(s):
         """Respond to a PUT request."""
-        # On Success, return the integer count of how many times that word has been PUT to the api in a JSON hash
         path = s.path
         content_len = int(s.headers.getheader('content-length', 0))
-        body = s.rfile.read(content_len)
+        # body = s.rfile.read(content_len)
         path_split = path.split('/')
         path_levels = len(path_split)-1  # first item is always empty (starting slash)
 
@@ -80,7 +89,7 @@ class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
                         if any(char in invalidChars for char in path_second_level):
                             s.return_error("non alpha character", 400)
                         else:
-                            s.return_success(path_second_level, wordnames)
+                            s.return_success("PUT", path_second_level, wordnames)
                     else:
                         s.return_error("not one word", 400)
                 else:
