@@ -16,6 +16,7 @@ for i in range(0, 10):
 
 class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
     def send_to_client(s, code, content_type, message):
+        """This module is to send necessary headers and body to client."""
         s.send_response(code)
         s.send_header("Content-type", content_type)
         s.end_headers()
@@ -27,21 +28,32 @@ class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
             s.wfile.write(message_to_write)
 
     def return_success(s, request_type, wordname, word_log):
-        if request_type == "PUT":
-            if wordname in word_log:
-                word_log[wordname] += 1
-            else:
-                word_log[wordname] = 1
-        elif request_type == "GET":
-            if wordname is None:
-                s.send_to_client(200, "application/json", {"words": word_log})
-                return
-            if wordname not in word_log:
-                s.send_to_client(200, "application/json", {"words": {wordname: 0}})
-                return 0
-        s.send_to_client(200, "application/json", {"words": {wordname: word_log[wordname]}})
+        """Returns a successful call with the proper body. If statements set up this way to allow for unexpected
+        case, which returns an error.
+        """
+        if request_type is "PUT" and wordname in word_log:
+            word_log[wordname] += 1
+            s.send_to_client(200, "application/json", {"words": {wordname: word_log[wordname]}})
+            return 0
+        elif request_type is "PUT" and wordname not in word_log:
+            word_log[wordname] = 1
+            s.send_to_client(200, "application/json", {"words": {wordname: word_log[wordname]}})
+            return 0
+        elif request_type is "GET" and wordname is None:
+            # send back all words
+            s.send_to_client(200, "application/json", {"words": word_log})
+            return 0
+        elif request_type is "GET" and wordname not in word_log:
+            s.send_to_client(200, "application/json", {"words": {wordname: 0}})
+            return 0
+        elif request_type is "GET" and wordname in word_log:
+            s.send_to_client(200, "application/json", {"words": {wordname: word_log[wordname]}})
+            return 0
+        else:
+            s.return_error("unknown", 500)  # did not match expected values above
 
     def return_error(s, error_type, code):
+        """Returns an error back to the client."""
         if error_type == "non alpha character":
             error_message = "PUT requests may only be alphabetical, cannot contain numeric or special characters."
         elif error_type == "not one word":
@@ -59,9 +71,6 @@ class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
         else:
             error_message = "An unexpected error has occured."
         s.send_to_client(code, "application/json", {"error": error_message})
-
-    def do_HEAD(s):
-        s.send_to_client(200, "text/html", False)
 
     def do_GET(s):
         """Respond to a GET request."""

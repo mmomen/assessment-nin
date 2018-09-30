@@ -1,8 +1,9 @@
 # How to run the solution and test
 
 1. Install tavern for testing: `pip install tavern[pytest]`
-2. Run server: `python server2.py`
-3. Run test cases: `py.text tests/test_cases.tavern.yaml` or `tavern-ci tests/test_cases.tavern.yaml`
+1. Run server: `python server.py`
+1. In another terminal window, run test cases: `py.text tests/test_cases.tavern.yaml` or `tavern-ci tests/test_cases.tavern.yaml`
+1. In window running the server, press ctrl+c to shut down.
 
 ## Test Cases - `test_cases.tavern.yaml`
 
