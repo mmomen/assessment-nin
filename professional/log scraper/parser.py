@@ -138,4 +138,4 @@ if __name__ == "__main__":
     fifth_case = find_lines_of_given_array_of_lines_in_dict(fourth_case_lines, request_ips)
     print "Breakdown by IP address of %s requests to a path under %s:" % (fourth_search_request, fourth_search_path)
     for key in fifth_case:
-        print str(key) + ": " + str(len(fifth_case[key]))
+        print "%s: %i" % (key, len(fifth_case[key]))
