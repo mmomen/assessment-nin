@@ -68,7 +68,7 @@ def find_lines_of_string_in_dict_log(search_string, dict_log, search_string_unar
 def find_lines_of_given_array_of_lines_in_dict(arr_lines_found, dict_log):
     ''' Given an array of line numbers from the log, and a dictionary of log values (of a
         different type from the log), return a dictionary of values of what appears the lines of the
-        given dictionary. For example: {"/dev/report/ec2-54-211-240-78.compute-1.amazonaws.com": [0]}
+        given dictionary. Example of obj returned: {"/dev/report/ec2-54-211-240-78.compute-1.amazonaws.com": [0]}
     '''
 
     results = {}
