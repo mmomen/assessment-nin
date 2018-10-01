@@ -9,7 +9,7 @@ import re
 
 def arg_parse():
     parser = argparse.ArgumentParser(
-        description="")
+        description="This file can be used to parse access logs.")
     parser.add_argument("log_path",
                         help="The directory path to scan files to be processed.")
     arguments = parser.parse_args()
@@ -111,7 +111,7 @@ if __name__ == "__main__":
     print "3: The total number of times Apache returned any code other than 200?"
     third_case_lines = find_lines_of_string_in_dict_log("200", request_status_codes, True)
     third_case_count = len(third_case_lines)
-    print str(third_case_count) + " appearances of non-200 HTTP status codes."
+    print "%i appearances of non-200 HTTP status codes." % third_case_count
 
     print "---"
 
@@ -130,7 +130,7 @@ if __name__ == "__main__":
             for line_num in find_puts_by_path[key]:
                 fourth_case_lines.append(line_num)
 
-    print str(len(fourth_case_lines)) + " appearances of " + fourth_search_request + " and " + fourth_search_path
+    print "%i appearances of %s and %s" % (len(fourth_case_lines), fourth_search_request, fourth_search_path)
 
     print "---"
 
