@@ -7,11 +7,7 @@ import string
 
 HOST_NAME = 'localhost'
 PORT_NUMBER = 9090
-
 wordnames = {}
-invalidChars = set(string.punctuation)
-for i in range(0, 10):
-    invalidChars.add(str(i))
 
 
 class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
@@ -92,9 +88,12 @@ class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
         """Respond to a PUT request."""
         path = s.path
         content_len = int(s.headers.getheader('content-length', 0))
-        # body = s.rfile.read(content_len)
         path_split = path.split('/')
         path_levels = len(path_split)-1  # first item is always empty (starting slash)
+
+        invalidChars = set(string.punctuation)
+        for i in range(0, 10):  # adding numeric characters to list of invalid characters
+            invalidChars.add(str(i))
 
         if content_len == 0:  # check for nothing in request body
             if (path_levels == 2 and path_split[-1] != '') or (path_levels == 3 and path_split[-1] == ''):
