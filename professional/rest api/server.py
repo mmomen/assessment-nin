@@ -34,21 +34,16 @@ class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
         if request_type is "PUT" and wordname in word_log:
             word_log[wordname] += 1
             s.send_to_client(200, "application/json", {"words": {wordname: word_log[wordname]}})
-            return 0
         elif request_type is "PUT" and wordname not in word_log:
             word_log[wordname] = 1
             s.send_to_client(200, "application/json", {"words": {wordname: word_log[wordname]}})
-            return 0
         elif request_type is "GET" and wordname is None:
             # send back all words
             s.send_to_client(200, "application/json", {"words": word_log})
-            return 0
         elif request_type is "GET" and wordname not in word_log:
             s.send_to_client(200, "application/json", {"words": {wordname: 0}})
-            return 0
         elif request_type is "GET" and wordname in word_log:
             s.send_to_client(200, "application/json", {"words": {wordname: word_log[wordname]}})
-            return 0
         else:
             s.return_error("unknown", 500)  # did not match expected values above
 
