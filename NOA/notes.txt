@@ -1,0 +1,30 @@
+challenge 1 notes
+
+https://askubuntu.com/questions/76785/how-to-escape-file-path-in-sed
+
+https://www.vagrantup.com/docs/provisioning/shell.html
+
+#copy vhosts.conf file to this dir
+#deploy new vhosts using provision's file command - this is preferred method (less chance of mistake and easier to edit)
+#move info.php
+#use script to call service restart
+
+$script_document_root_fix = <<-SCRIPT
+mv /var/www/info.php /var/www/html/info.php
+sed -i -e "s|VirtualDocumentRoot /vagrant/%0|VirtualDocumentRoot /var/www/html|g" /etc/httpd/conf.d/vhosts.conf
+service httpd restart
+SCRIPT
+
+https://www.alexkras.com/how-to-copy-one-file-from-vagrant-virtual-machine-to-local-host/
+
+https://wiki.openssl.org/index.php/Command_Line_Utilities#Certificate_Request_.2F_pkcs10_.2F_req
+
+challenge 2 notes
+https://stackoverflow.com/questions/168409/how-do-you-get-a-directory-listing-sorted-by-creation-date-in-python
+
+https://stackoverflow.com/questions/12485666/python-deleting-all-files-in-a-folder-older-than-x-days
+
+https://gist.github.com/sweenzor/1782457
+
+invalid chars: https://stackoverflow.com/questions/19970532/how-to-check-a-string-for-a-special-character
+tavern testing: https://taverntesting.github.io/
